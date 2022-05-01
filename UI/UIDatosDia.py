@@ -11,7 +11,24 @@ try:
     if not DiaProcess.same_Month():
         print("No ha generado el informe del mes anterior, para ingresar nuevos datos debe primero enviar el informe anterior")
         time.sleep(5)
-        exit()
+        #Se le pregunta la usuario si desea enviar el informe
+        answerOptions = ['Si', 'No']
+        answer = input("\nDesea enviar el informe ya (Si/No)> ").capitalize()
+        while answer not in answerOptions:
+            print("\tRespuesta Invalida")
+            time.sleep(1)
+            answer = input("\nDesea enviar el informe ya (Si/No)> ").capitalize()
+        #Si el usuario decidio enviar el informe se envia y luego se le permite ingresar los datos nuevos
+        if answer == 'Si':
+            import UI.UIMonthReport
+            print("""
+            ---------------------------------------------------
+               Ya puede ingresar los datos del nuevo mes
+            ---------------------------------------------------
+            """)
+            time.sleep(1)
+        else:
+            exit()
 except JSONDecodeError:
     pass
 except FileNotFoundError:
