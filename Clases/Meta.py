@@ -61,15 +61,15 @@ class Meta:
     @classmethod
     def display_Types(cls):
         'Muestra los tipos de metas que hay disponibles'
-        displayString = "\t\nTipos de Metas Disponibles\n"
+        displayString = "\t\nTIPOS DE METAS" + '.'*45 + "\n"
         for value in cls.__TIPOS_DE_METAS.values():
             displayString += '\t-- ' + value + "\n"
         return displayString
     
     def __str__(self) -> str:
         return f"""
-        Nombre: {self.nombre}
-        Cantidad: {self.cantidad}
-        Descripcion: {self.descripcion}
-        Tipo: {self.tipo}
+        NOMBRE: {self.nombre}
+        OBJETIVO: {self.cantidad}
+        DESCRIPCION: {self.descripcion}
+        TIPO: {self.tipo}
         """

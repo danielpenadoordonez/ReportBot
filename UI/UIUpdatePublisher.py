@@ -27,7 +27,7 @@ else:
     |     PUBLICADORA: {PUBLICADOR.nombreCompleto}    
     ===================================================
     |""")
-print(f"""
+print(f"""    |
     |
     | 1. Correo Personal ->  {PUBLICADOR.correoPersonal}
     |

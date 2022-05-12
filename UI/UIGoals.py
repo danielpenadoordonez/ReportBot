@@ -48,10 +48,10 @@ if goalChoice == 'A':
 
 #Opcion B = Agregar Meta
 elif goalChoice == 'B':
-    #Desplegar las opciones de metas
-    print(Meta.display_Types())
 
     def nueva_Meta():
+        #Desplegar las opciones de metas
+        print(Meta.display_Types())
         try:
             #En el fondo se cargan las metas que ya estan registradas
             GoalProcess.cargar_Mis_Metas()
@@ -71,6 +71,10 @@ elif goalChoice == 'B':
                 print('La meta ingresada no esta disponible')
                 time.sleep(1)
         nombre = input("\n\tNOMBRE PERSONALIZADO: ")
+        while nombre.isspace() or nombre == "":
+            print("Por favor elija un nombre para su nueva meta")
+            time.sleep(1)
+            nombre = input("\n\tNOMBRE PERSONALIZADO: ")
         descripcion = input("\n\tDESCRIPCION: ")
         cantidad = 0
         invalidData = True
@@ -90,7 +94,7 @@ elif goalChoice == 'B':
             return
         GoalProcess.GuardaMetaJSON(meta)
         time.sleep(1)
-        print("Meta Guardada")
+        print('\n\n' + ' '*20 + "¡Meta Guardada!")
         time.sleep(2)
 
     #Se llama a la funcion
@@ -135,16 +139,16 @@ elif goalChoice == 'C':
                             MIS METAS
 
     ============================================================
-                    |                     |
-        META        |     CANTIDAD        |    TIPO DE META
-                    |                     | 
+                    |                     
+        META        |     NOMBRE (OBJETIVO)        
+                    |                     
     ============================================================
     """
     for meta in misMetas:
         tablaMetas += f"""
-                    |                     |
-             {meta.id}      |       {meta.cantidad}            |      {meta.tipo}
-                    |                     |
+                    |                     
+             {meta.id}      |       {meta.nombre} ({meta.cantidad})          
+                    |                     
     ------------------------------------------------------------
         """
         time.sleep(0.5)
