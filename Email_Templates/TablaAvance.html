@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <style>
+            .tbl{
+                margin-left: auto;
+                margin-right: auto;
+                width: 90%;
+            }
+
+            #goal-title{
+                height: 70px;
+                background-color: gray;
+            }
+
+            #goal-title th{
+                padding-top: 3%;
+                color: white;
+            }
+
+            .goal-plus #message{
+                background-color: lightgreen;
+            }
+
+            .goal-less #message{
+                background-color: yellow;
+            }
+
+            #message td{
+                text-align: center;
+                padding-left: 2%;
+                padding-top: 2%;
+            }
+
+            .data td{
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <br>
+        <h1 style="text-align: center;">Avance</h1>
+    <table border="3" style="background-color: wheat; width: 65%; text-align: center; margin-left: auto; margin-right: auto;">
+        <tr style="height: 50px;">
+            <td style="font-weight: bold;">Horas</td>
+            <td style="width: 30%;">15</td>
+        </tr>
+        <tr style="height: 50px;">
+            <td style="font-weight: bolder;">Publicaciones</td>
+            <td style="width: 30%;">8</td>
+        </tr>
+        <tr style="height: 50px;">
+            <td style="font-weight: bold;">Videos</td>
+            <td style="width: 30%;">4</td>
+        </tr>
+        <tr style="height: 50px;">
+            <td style="font-weight: bold;">Revisitas</td>
+            <td style="width: 30%;">7</td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1 style="text-align: center;">Progreso de Mis Metas</h1>
+    <br>
+    <div class="goal-plus">
+        <table class="tbl" id="goal-table">
+            <tr id="goal-title">
+                <th colspan="4"><h2>Nombre de Meta</h2></th>
+            </tr>
+            <tr style="height: 45px;" class="data">
+                <td style="font-weight: bolder;">Cantidad Actual</td>
+                <td style="font-weight: bolder;">Cantidad Esperada</td>
+                <td style="font-weight: bolder;">Sobrante o faltante</td>
+                <td style="font-weight: bolder;">% de Logro</td>
+            </tr>
+            <tr style="height: 60px;" class="data">
+                <td>12</td>
+                <td>10</td>
+                <td>+2</td>
+                <td>110%</td>
+            </tr>
+            <tr id="message">
+                <td colspan="2"><h3>Excelente: Esta superando su meta</h3></td>
+                <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: 20</h3></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="goal-plus">
+        <table class="tbl" id="goal-table">
+            <tr id="goal-title">
+                <th colspan="4"><h2>Nombre de Meta</h2></th>
+            </tr>
+            <tr style="height: 45px;" class="data">
+                <td style="font-weight: bolder;">Cantidad Actual</td>
+                <td style="font-weight: bolder;">Cantidad Esperada</td>
+                <td style="font-weight: bolder;">Sobrante o faltante</td>
+                <td style="font-weight: bolder;">% de Logro</td>
+            </tr>
+            <tr style="height: 60px;" class="data">
+                <td>8</td>
+                <td>8</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr id="message">
+                <td colspan="2"><h3>Muy Bien: Va igualando su meta</h3></td>
+                <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: 15</h3></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    <div class="goal-less">
+        <table class="tbl" id="goal-table">
+            <tr id="goal-title">
+                <th colspan="4"><h2>Nombre de Meta</h2></th>
+            </tr>
+            <tr style="height: 45px;" class="data">
+                <td style="font-weight: bolder;">Cantidad Actual</td>
+                <td style="font-weight: bolder;">Cantidad Esperada</td>
+                <td style="font-weight: bolder;">Sobrante o faltante</td>
+                <td style="font-weight: bolder;">% de Logro</td>
+            </tr>
+            <tr style="height: 60px;" class="data">
+                <td>11</td>
+                <td>15</td>
+                <td>-4</td>
+                <td>86%</td>
+            </tr>
+            <tr id="message">
+                <td colspan="2"><h3>Va por debajo de su meta</h3></td>
+                <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: 10</h3></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+    </body>
+</html>
