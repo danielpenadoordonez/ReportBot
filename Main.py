@@ -2,6 +2,11 @@ import smtplib
 import time
 import os
 from BLL import PublisherProcess
+from UI.UIDatosDia import load_UIDatosDia
+from UI.UIMonthReport import load_UIMonthReport
+from UI.UIReportAdvance import load_UIReportAdvance
+from UI.UIGoals import load_UIGoals
+from UI.UIUpdatePublisher import load_UIUpdatePublisher
 from DAL.DT.Env import Env
 from json.decoder import JSONDecodeError
 import getpass
@@ -107,28 +112,42 @@ try:
     while opcion != '6':
         
         if opcion == '1':
-            import UI.UIDatosDia
+            load_UIDatosDia()
 
         elif opcion == '2':
-            import UI.UIMonthReport
+            load_UIMonthReport()
             
         elif opcion == '3':
-            import UI.UIReportAdvance
+            load_UIReportAdvance()
 
         elif opcion == '4':
-            import UI.UIGoals
+            load_UIGoals()
 
         elif opcion == '5':
-            print(opcion)
-            import UI.UIUpdatePublisher
+            load_UIUpdatePublisher()
+
+        print("""
+
+
+==========================================
+|  QUE DESEA HACER AHORA                 |
+|----------------------------------------| 
+|   1. INGRESAR DATOS DEL DIA            |
+|   2. GENERAR Y ENVIAR INFORME DEL MES  |
+|   3. VER AVANCE ACTUAL                 |
+|   4. METAS MENSUALES                   |
+|   5. EDITAR DATOS DE PUBLICADOR        |
+|   6. SALIR                             |
+==========================================
+        """)
         
         opcion = input("\n> ")
 
 except KeyboardInterrupt:
-    print("\nHasta la proxima !!")
+    print("\n\nHasta la proxima !!")
     time.sleep(2)
     exit()
 
-print("Hasta la proxima !!")
+print("\nHasta la proxima !!")
 time.sleep(2)
     

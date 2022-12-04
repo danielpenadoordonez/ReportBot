@@ -46,7 +46,10 @@ def calcula_Progreso_Meta(meta, avance) -> dict:
     porcentajeDias = diaActual / total_Dias_Mes_Actual()
     cantidadEsperada = porcentajeDias * meta.cantidad
     sobranteFaltante = avance[meta.tipo] - cantidadEsperada
-    porcentajeLogro = avance[meta.tipo] / round(cantidadEsperada)
+    try:
+        porcentajeLogro = avance[meta.tipo] / round(cantidadEsperada)
+    except ZeroDivisionError:
+        porcentajeLogro = 0
     
     valores = dict()
     valores['CantActual'] = avance[meta.tipo]
