@@ -16,8 +16,8 @@ class Env:
                 dotenv_Vars = f.read().split()
         except FileNotFoundError:
             raise FileNotFoundError("No se encontró un archivo importante del programa!!")
-        except:
-            raise Exception("Ocurrio un error al cargar el programa, infórmele al desarrollador!!")
+        except Exception as err:
+            raise Exception(err)
 
         for var in dotenv_Vars:
             if var.startswith('#') or var.isspace(): #Skip comment and empty lines

@@ -3,6 +3,7 @@ import smtplib
 from BLL import PublisherProcess
 from BLL import SendEmail
 from Clases.Publicador import Publicador
+from Services.Log import Log
 import getpass
 
 print("""
@@ -89,16 +90,20 @@ if opcion == "Si":
     #Se crea el nuevo publicador y se guardan sus datos
     newPublisher = Publicador(fullName, personalEmail, reportRecieverEmail, group, gender, password)
     PublisherProcess.GuardaPublicador(newPublisher)
+    Log.info(logName="user", message=f"NUEVO USUARIO CREADO -> {newPublisher.nombreCompleto}")
     print("---------------Procesando y registrando datos---------------")
     time.sleep(4)
     #Enviar aviso de que hay un nuevo publicador registrado
     try:
         SendEmail.load_Creds()
         SendEmail.send_New_User_Alert(newPublisher)
-    except smtplib.SMTPAuthenticationError:
-        pass
-    except smtplib.SMTPException:
-        pass
+    except smtplib.SMTPAuthenticationError as err:
+        Log.exception(logName="user", message=err)
+    except smtplib.SMTPException as err:
+        Log.exception(logName="user", message=err)
+    except Exception as err:
+        Log.exception(logName="user", message=err)
+
     print("\nLos datos han sido registrados correctamente")
     time.sleep(1)
     print("\nPara empezar a usar las funciones disponibles, vuelva a abrir el programa")

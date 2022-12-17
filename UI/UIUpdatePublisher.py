@@ -1,17 +1,24 @@
 import time
 import getpass
 from BLL import PublisherProcess
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 
 def load_UIUpdatePublisher():
     PUBLICADOR = None
     try:
         PUBLICADOR = PublisherProcess.ObtienePublicador()
-    except JSONDecodeError:
+    except JSONDecodeError as err:
         print("Ocurrio un error")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         exit()
-    except FileNotFoundError:
+    except FileNotFoundError as err:
         print("Ocurrio un error")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         exit()
 
 
@@ -102,19 +109,24 @@ def load_UIUpdatePublisher():
                 while not PublisherProcess.isPasswdCorrect(PUBLICADOR.passwd, loginpassword):
                     print("\tContraseña Incorrecta")
                     fails += 1
+                    Log.warning(logName="user", message=f"Intento de Borrar Usuario fallido - Fallo {fails}")
                     time.sleep(1)
                     #Al segundo fallo
                     if fails == 2:
                         print("\n¡¡¡Se le acabaron los intentos, ReportBot se va cerrar!!!")
+                        Log.warning(logName="user", message="ReporBot se va cerrar por seguridad, se intento borrar toda la informacion")
+                        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
                         time.sleep(2)
                         exit()
                     loginpassword = getpass.getpass("\nContraseña: ", stream=None)
                     
                 PublisherProcess.EliminaPublicador()
+                Log.warning(logName="user", message=f"TODOS LOS DATOS DEL PROGRAMA INCLUYENDO EL USUARIO HAN SIDO BORRADOS")
                 print("------------------ELIMINANDO TODOS LOS DATOS------------------")
                 time.sleep(2)
                 print("\nToda su informacion, metas y registros del mes ha sido eliminada")
                 time.sleep(4)
+                Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
                 exit()
 
         elif selectedOption == '6':
@@ -150,6 +162,7 @@ def load_UIUpdatePublisher():
     if selectedOption != '5' and selectedOption != '6':
         #Se guardan los datos modificados
         PublisherProcess.EditaPublicador(PUBLICADOR)
+        Log.warning(logName="user", message=f"Se ha editado informacion de usuario de {PUBLICADOR.nombreCompleto}")
         time.sleep(1)
         print("\nLos nuevos datos se han actualizado")
     time.sleep(2)

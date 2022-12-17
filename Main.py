@@ -8,6 +8,7 @@ from UI.UIReportAdvance import load_UIReportAdvance
 from UI.UIGoals import load_UIGoals
 from UI.UIUpdatePublisher import load_UIUpdatePublisher
 from DAL.DT.Env import Env
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 import getpass
 
@@ -15,7 +16,9 @@ import getpass
 try:
     Env.load_Env_Variables(os.path.join("DAL", "DT", ".env"))
 except Exception as err:
-    print(err)
+    print("Ocurrio un error al cargar el programa!! Infórmele al desarrollador")
+    Log.critical(logName="bot", message="ReportBot no abre, puede haber un error con .env")
+    Log.exception(logName="bot", message=err)
     time.sleep(3)
     exit()
 
@@ -42,6 +45,7 @@ try:
     while not PublisherProcess.isPasswdCorrect(savedPassword, loginpassword):
         print("\tContraseña Incorrecta")
         fails += 1
+        Log.warning(logName="user", message=f"Intento de Login fallido - Fallo {fails}")
         time.sleep(1)
         #Al tercer fallo
         if fails == 3:
@@ -62,6 +66,7 @@ try:
 
 except AssertionError:
     print("\nUsted no tiene contraseña")
+    Log.error(logName="user", message=f"No se encontro la contraseña para {PUBLICADOR.nombreCompleto} - La contraseña se borro o el hash fue alterado")
     time.sleep(1)
     #Se le tiene que pedir al usuario que registre una contraseña
     password = getpass.getpass("\n\tDIGITE UNA CONTRASEÑA (No se va a ver cuando la escriba): ", stream=None)
@@ -74,12 +79,15 @@ except AssertionError:
     #Se actualiza el usuario
     PUBLICADOR.passwd = password
     PublisherProcess.EditaPublicador(PUBLICADOR)
+    Log.info(logName="user", message=f"Se registro una nueva contraseña para {PUBLICADOR.nombreCompleto}")
     print("......Contraseña Guardada......")
     time.sleep(2)
     print("\nVuelva a abrir el programa para usar su nueva contraseña")
-    time.sleep(2)
+    time.sleep(3)
     exit()
 
+Log.info(logName="user", message=f"{PUBLICADOR.nombreCompleto} HA INICIADO SESION")
+Log.info(logName="bot", message="NUEVA SESION DE REPORTBOT ABIERTA")
 opcion = input(f"""
  ______    ______    _______    _______    _______    _________          ______     ______   __________ 
 |      |  |         |       |   |      |   |      |       |             |      |   |      |      |   
@@ -146,8 +154,12 @@ try:
 except KeyboardInterrupt:
     print("\n\nHasta la proxima !!")
     time.sleep(2)
+    Log.info(logName="user", message=f"{PUBLICADOR.nombreCompleto} HA CERRADO SESION")
+    Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
     exit()
 
 print("\nHasta la proxima !!")
 time.sleep(2)
+Log.info(logName="user", message=f"{PUBLICADOR.nombreCompleto} HA CERRADO LA SESION")
+Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
     
