@@ -5,6 +5,7 @@ from BLL import SendEmail
 from BLL import GoalProcess
 from BLL import PublisherProcess
 from Services.Log import Log
+from Services.ReportBotError import ReportBotError
 from json.decoder import JSONDecodeError
 import smtplib
 
@@ -30,13 +31,17 @@ def load_UIMonthReport():
         DiaProcess.carga_Dias_Registrados()
         if DiaProcess.same_Month():
             print("Este mes no ha terminado, debe esperar a que concluya para enviar el informe")
-            time.sleep(5)
+            Log.warning(logName="advance-report", message="No se puede enviar el informe hasta que el mes no haya terminado")
+            time.sleep(2)
+            raise ReportBotError("Mes no ha concluido")
     except JSONDecodeError:
         print("No cuenta con datos registrados para crear y enviar el informe")
         time.sleep(3)
     except FileNotFoundError:
         print("No cuenta con datos registrados para crear y enviar el informe")
         time.sleep(3)
+    except ReportBotError as err:
+        Log.exception(logName="advance-report", message=err)
     else:
         #Se tiene que solicitar la cantidad de estudios que dirigio en el mes
         estudios = 0
@@ -73,6 +78,7 @@ def load_UIMonthReport():
                 goalList = GoalProcess.cargar_Mis_Metas()
                 time.sleep(1)
                 SendEmail.envia_Reporte_Metas(goalList, dictInforme, PUBLICADOR)
+                Log.info(logName="advance-report", message="Report de Metas enviado")
             except JSONDecodeError:
                 pass
             except FileNotFoundError:
@@ -82,7 +88,7 @@ def load_UIMonthReport():
             Log.info(logName="daily-data", message="Informe enviado, los datos del mes se han borrado de DatosMes.json")
             Log.info(logName="advance-report", message=f"Informe enviado -> Horas: {horasInf}, Publicaciones: {publicacionesInf}, Videos: {videosInf}, Revisitas: {revisitasInf}, Estudios: {estudios}, Dias Informados: {diasInf}")
             #Se confirma que el proceso se hizo de manera exitosa
-            print("\t¡El Informe ha sido creado y enviado!")
+            print("\n\t¡El Informe ha sido creado y enviado!")
         except smtplib.SMTPAuthenticationError:
             print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
             Log.exception(logName="advance-report", message=err)

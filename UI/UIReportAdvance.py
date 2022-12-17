@@ -39,38 +39,45 @@ def load_UIReportAdvance():
         print("No cuenta con datos registrados para generar un avance")
         time.sleep(3)
     else:
-        horas = avance.getTotalHoras()
-        publicaciones = avance.getTotalPublicaciones()
-        revisitas = avance.getTotalRevisitas()
-        videos = avance.getTotalVideos()
-        diasAvance = avance.getTotalDias()
-        
+        #Si empezó un nuevo mes y el usuario no ha enviado el informe del mes anterior 
+        #entonces no puede generar mas avances de ese mes anterior
+        if not DiaProcess.same_Month():
+            print("No ha enviado el informe y no se pueden generar mas avances de ese mes anterior")
+            Log.error(logName="advance-report", message="No se pueden generar mas avances para el mes anterior, Causa -> No se ha enviado el informe")
+            time.sleep(2)
+        else:
+            horas = avance.getTotalHoras()
+            publicaciones = avance.getTotalPublicaciones()
+            revisitas = avance.getTotalRevisitas()
+            videos = avance.getTotalVideos()
+            diasAvance = avance.getTotalDias()
+            
 
-        print("-"*12 + "Creando Avance" + "-"*12)
-        time.sleep(2)
-        print(avance.construyeAvance())
-        dictAvance = {"Horas" : horas, "Publicaciones" : publicaciones, "Revisitas" : revisitas, "Videos" : videos, "Dias" : diasAvance}
-        #Se cargan Mis Metas
-        misMetas = list()
-        try:
-            misMetas = GoalProcess.cargar_Mis_Metas()
-        except JSONDecodeError:
-            pass
-        except FileNotFoundError:
-            pass
-        #Se envia el avance por correo
-        try:
-            SendEmail.load_Creds()
-            SendEmail.envia_Avance(dictAvance, misMetas, PUBLICADOR)
-            Log.info(logName="advance-report", message=f"Avance enviado -> Horas: {horas}, Publicaciones: {publicaciones}, Videos: {videos}, Revisitas: {revisitas}, Dias Informados: {diasAvance}")
-            print("El Avance ha sido creado y enviado")
-        except smtplib.SMTPAuthenticationError:
-            print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
-            Log.exception(logName="advance-report", message=err)
-        except smtplib.SMTPException:
-            print("Ocurrio un error al enviar el correo")
-            Log.exception(logName="advance-report", message=err)
-        except Exception as err:
-            print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
-            Log.exception(logName="advance-report", message=err)
-        time.sleep(5)
+            print("-"*12 + "Creando Avance" + "-"*12)
+            time.sleep(2)
+            print(avance.construyeAvance())
+            dictAvance = {"Horas" : horas, "Publicaciones" : publicaciones, "Revisitas" : revisitas, "Videos" : videos, "Dias" : diasAvance}
+            #Se cargan Mis Metas
+            misMetas = list()
+            try:
+                misMetas = GoalProcess.cargar_Mis_Metas()
+            except JSONDecodeError:
+                pass
+            except FileNotFoundError:
+                pass
+            #Se envia el avance por correo
+            try:
+                SendEmail.load_Creds()
+                SendEmail.envia_Avance(dictAvance, misMetas, PUBLICADOR)
+                Log.info(logName="advance-report", message=f"Avance enviado -> Horas: {horas}, Publicaciones: {publicaciones}, Videos: {videos}, Revisitas: {revisitas}, Dias Informados: {diasAvance}")
+                print("\n\t¡El Informe ha sido creado y enviado!")
+            except smtplib.SMTPAuthenticationError:
+                print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
+                Log.exception(logName="advance-report", message=err)
+            except smtplib.SMTPException:
+                print("Ocurrio un error al enviar el correo")
+                Log.exception(logName="advance-report", message=err)
+            except Exception as err:
+                print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
+                Log.exception(logName="advance-report", message=err)
+            time.sleep(5)

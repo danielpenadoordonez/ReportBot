@@ -1,0 +1,2 @@
+class ReportBotError(Exception):
+    pass
