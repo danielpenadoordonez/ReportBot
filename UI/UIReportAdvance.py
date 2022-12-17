@@ -4,6 +4,7 @@ from BLL import DiaProcess
 from BLL import SendEmail
 from BLL import GoalProcess
 from BLL import PublisherProcess
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 import smtplib
 
@@ -11,12 +12,18 @@ def load_UIReportAdvance():
     PUBLICADOR = None
     try:
         PUBLICADOR = PublisherProcess.ObtienePublicador()
-    except JSONDecodeError:
+    except JSONDecodeError as err:
         print("Ocurrio un error, el programa se va cerrar")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         time.sleep(3)
         exit()
-    except FileNotFoundError:
+    except FileNotFoundError as err:
         print("Ocurrio un error")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         time.sleep(3)
         exit()
 
@@ -37,9 +44,11 @@ def load_UIReportAdvance():
         revisitas = avance.getTotalRevisitas()
         videos = avance.getTotalVideos()
         diasAvance = avance.getTotalDias()
-            
+        
+
         print("-"*12 + "Creando Avance" + "-"*12)
         time.sleep(2)
+        print(avance.construyeAvance())
         dictAvance = {"Horas" : horas, "Publicaciones" : publicaciones, "Revisitas" : revisitas, "Videos" : videos, "Dias" : diasAvance}
         #Se cargan Mis Metas
         misMetas = list()
@@ -53,9 +62,15 @@ def load_UIReportAdvance():
         try:
             SendEmail.load_Creds()
             SendEmail.envia_Avance(dictAvance, misMetas, PUBLICADOR)
+            Log.info(logName="advance-report", message=f"Avance enviado -> Horas: {horas}, Publicaciones: {publicaciones}, Videos: {videos}, Revisitas: {revisitas}, Dias Informados: {diasAvance}")
             print("El Avance ha sido creado y enviado")
         except smtplib.SMTPAuthenticationError:
             print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
+            Log.exception(logName="advance-report", message=err)
         except smtplib.SMTPException:
             print("Ocurrio un error al enviar el correo")
+            Log.exception(logName="advance-report", message=err)
+        except Exception as err:
+            print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
+            Log.exception(logName="advance-report", message=err)
         time.sleep(5)

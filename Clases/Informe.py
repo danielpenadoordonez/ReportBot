@@ -86,3 +86,24 @@ class Informe:
                          ----------------------------------"""
                     
         return reporte
+
+    def construyeAvance(self):
+        horas = self.getTotalHoras()
+        publicaciones = self.getTotalPublicaciones()
+        revisitas = self.getTotalRevisitas()
+        videos = self.getTotalVideos()
+        
+        avance = f""" 
+                         ----------------------------------
+                         |                 |                
+                         |  Horas          |      {horas}         
+                         |                 |              
+                         |  Publicaciones  |      {publicaciones}       
+                         |                 |              
+                         |  Videos         |      {videos}       
+                         |                 |              
+                         |  Revisitas      |      {revisitas}            
+                         |                 |              
+                         ----------------------------------"""
+                    
+        return avance

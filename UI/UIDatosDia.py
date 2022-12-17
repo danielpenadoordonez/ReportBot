@@ -1,6 +1,8 @@
 import time
 from Clases.Dia import Dia
 from BLL import DiaProcess
+from UI.UIMonthReport import load_UIMonthReport
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 
 def load_UIDatosDia():
@@ -26,7 +28,7 @@ def load_UIDatosDia():
                 answer = input("\nDesea enviar el informe ya (Si/No)> ").capitalize()
             #Si el usuario decidio enviar el informe se envia y luego se le permite ingresar los datos nuevos
             if answer == 'Si':
-                import UI.UIMonthReport
+                load_UIMonthReport()
                 DiaProcess.EliminaDatos()
 
                 #Comprobar que los datos del mes anterior no estén en el archivo
@@ -39,6 +41,7 @@ def load_UIDatosDia():
                     pass
                 else:
                     print("¡No se pudieron eliminar los datos del mes anterior!")
+                    Log.error(logName="daily-data", message="No se pudieron borrar los datos del archivo DatosMes.json")
                     time.sleep(1)
                     print("\nContacte al desarrollador para que le ayude y pueda registrar los datos del nuevo mes")
                     time.sleep(4)
@@ -68,5 +71,6 @@ def load_UIDatosDia():
     #Se construye el dia con su informacion para guardarlo en el archivo
     dia  = Dia(horas, revisitas, publicaciones, videos)
     DiaProcess.GuardaDatos(dia)
+    Log.info(logName="daily-data", message=f"Registro de datos -> Horas: {dia.horas}, Revisitas: {dia.revisitas}, Publicaciones: {dia.publicaciones}, Videos: {dia.videos}")
     print("Datos Guardados")
     time.sleep(2)

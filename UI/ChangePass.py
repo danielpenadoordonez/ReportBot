@@ -40,6 +40,7 @@ except smtplib.SMTPException as err:
     Log.exception(logName="user", message=err)
     time.sleep(5)
 except Exception as err:
+    print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
     Log.exception(logName="user", message=err)
 else:
     codeEntered = input("\nIngrese el código enviado a su correo: ")

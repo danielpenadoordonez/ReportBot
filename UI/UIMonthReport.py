@@ -4,6 +4,7 @@ from BLL import DiaProcess
 from BLL import SendEmail
 from BLL import GoalProcess
 from BLL import PublisherProcess
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 import smtplib
 
@@ -11,11 +12,17 @@ def load_UIMonthReport():
     PUBLICADOR = None
     try:
         PUBLICADOR = PublisherProcess.ObtienePublicador()
-    except JSONDecodeError:
+    except JSONDecodeError as err:
         print("Ocurrio un error")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         exit()
-    except FileNotFoundError:
-        print("Ocurrio un erro")
+    except FileNotFoundError as err:
+        print("Ocurrio un error")
+        Log.critical(logName="user", message="No se puede cargar la informacion del publicador")
+        Log.exception(logName="user", message=err)
+        Log.info(logName="bot", message="SESION DE REPORTBOT CERRADA")
         exit()
 
     #Primero se tiene que verificar que el mes haya terminado para generar el informe
@@ -72,10 +79,17 @@ def load_UIMonthReport():
                 pass
             #Se elimina el contenido del archivo con los datos para que se pueda volver a usar
             DiaProcess.EliminaDatos()
+            Log.info(logName="daily-data", message="Informe enviado, los datos del mes se han borrado de DatosMes.json")
+            Log.info(logName="advance-report", message=f"Informe enviado -> Horas: {horasInf}, Publicaciones: {publicacionesInf}, Videos: {videosInf}, Revisitas: {revisitasInf}, Estudios: {estudios}, Dias Informados: {diasInf}")
             #Se confirma que el proceso se hizo de manera exitosa
-            print("El Informe ha sido creado y enviado")
+            print("\t¡El Informe ha sido creado y enviado!")
         except smtplib.SMTPAuthenticationError:
             print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
+            Log.exception(logName="advance-report", message=err)
         except smtplib.SMTPException:
             print("Ocurrio un error al enviar el correo")
+            Log.exception(logName="advance-report", message=err)
+        except Exception as err:
+            print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
+            Log.exception(logName="advance-report", message=err)
         time.sleep(5)
