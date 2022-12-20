@@ -57,7 +57,7 @@ else:
         PUBLICADOR.passwd = password
         PublisherProcess.EditaPublicador(PUBLICADOR)
         print("\n......Contraseña Guardada......")
-        Log.info(logName="user", message=f"Se registro una nueva contraseña para {PUBLICADOR.nombreCompleto}")
+        Log.warning(logName="user", message=f"Se registro una nueva contraseña para {PUBLICADOR.nombreCompleto}")
         time.sleep(2)
         print("\nVuelva a abrir el programa para usar su nueva contraseña")
         time.sleep(2)

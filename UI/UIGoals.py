@@ -1,6 +1,7 @@
 import time
 from Clases.Meta import Meta
 from BLL import GoalProcess
+from Services.Log import Log
 from json.decoder import JSONDecodeError
 
 def load_UIGoals():
@@ -30,21 +31,18 @@ def load_UIGoals():
             #Se traen todas las metas registradas en el JSON y se muestra la info de cada una 
             for goal in GoalProcess.cargar_Mis_Metas():
                 print(goal)
-                time.sleep(3)
+                time.sleep(1)
+            Log.info(logName="goals", message="Metas cargadas y mostradas correctamente")
         except JSONDecodeError:
             #Esta excepcion se da si el archivo JSON esta vacio lo que significa
             #que no hay metas guardadas
             print("\nNo tiene metas registradas")
-            time.sleep(3)
+            Log.warning(logName="goals", message="No se encontraron metas en Metas.json: El archivo esta vacío, no existe o tiene algún error de sintaxis")
+            time.sleep(1)
         except FileNotFoundError:
             print("\nNo tiene metas registradas")
-            time.sleep(3)
-        # else:
-        #     while True:
-        #         try: 
-        #             input("Presione Ctrl C para Salir")
-        #         except KeyboardInterrupt:
-        #             pass
+            Log.warning(logName="goals", message="No se encontraron metas en Metas.json: El archivo esta vacío, no existe o tiene algún error de sintaxis")
+            time.sleep(1)
 
     #Opcion B = Agregar Meta
     elif goalChoice == 'B':
@@ -93,6 +91,7 @@ def load_UIGoals():
                 time.sleep(8)
                 return
             GoalProcess.GuardaMetaJSON(meta)
+            Log.info(logName="goals", message=f"NUEVA META GUARDADA -> Nombre: {meta.nombre}, Cantidad: {meta.cantidad}, Tipo de Meta: {meta.tipo}, Descripcion: {meta.descripcion}")
             time.sleep(1)
             print('\n\n' + ' '*20 + "¡Meta Guardada!")
             time.sleep(2)
@@ -126,79 +125,84 @@ def load_UIGoals():
         except JSONDecodeError:
             #Se muestra el siguiente mensaje si no hay metas guardadas
             print("\nNo tiene metas registradas")
+            Log.warning(logName="goals", message="No se encontraron metas en Metas.json: El archivo esta vacío, no existe o tiene algún error de sintaxis")
             time.sleep(3)
-            exit()
         except FileNotFoundError:
             print("\nNo tiene metas registradas")
+            Log.warning(logName="goals", message="No se encontraron metas en Metas.json: El archivo esta vacío, no existe o tiene algún error de sintaxis")
             time.sleep(3)
-            exit()
+        else:
+            #Por cada meta, muestra el ID, el tipo de meta, y la cantidad en una tabla
+            tablaMetas = f"""
+        
+                                    MIS METAS
 
-        #Por cada meta, muestra el ID, el tipo de meta, y la cantidad en una tabla
-        tablaMetas = f"""
-    
-                                MIS METAS
-
-        ============================================================
-                        |                     
-            META        |     NOMBRE (OBJETIVO)        
-                        |                     
-        ============================================================
-        """
-        for meta in misMetas:
-            tablaMetas += f"""
-                        |                     
-                 {meta.id}      |       {meta.nombre} ({meta.cantidad})          
-                        |                     
-        ------------------------------------------------------------
+            ============================================================
+                            |                     
+                META        |     NOMBRE (OBJETIVO)        
+                            |                     
+            ============================================================
             """
-            time.sleep(0.5)
-            idsDisponibles.append(meta.id)
+            for meta in misMetas:
+                tablaMetas += f"""
+                            |                     
+                     {meta.id}      |       {meta.nombre} ({meta.cantidad})          
+                            |                     
+            ------------------------------------------------------------
+                """
+                time.sleep(0.5)
+                idsDisponibles.append(meta.id)
 
-        print(tablaMetas)
-        idSeleccionado = 0
-        idInvalido = True
-        while idInvalido:
-            try:
-                idSeleccionado = input("\n\tMETA a Eliminar o digite Todo si desea eliminarlas todas> ")
-                if idSeleccionado == "Todo" or idSeleccionado == "todo" or idSeleccionado == "TODO":
-                    #Se debe confirmar
-                    confirmacion = input("\nEsta seguro que desea eliminar todas sus metas (Si/No)> ")
-                    if confirmacion == "Si" or confirmacion == "si":
-                        GoalProcess.BorraJSONMetas()
+            print(tablaMetas)
+            idSeleccionado = 0
+            idInvalido = True
+            while idInvalido:
+                try:
+                    idSeleccionado = input("\n\tMETA a Eliminar o digite Todo si desea eliminarlas todas> ")
+                    if idSeleccionado == "Todo" or idSeleccionado == "todo" or idSeleccionado == "TODO":
+                        #Se debe confirmar
+                        confirmacion = input("\nEsta seguro que desea eliminar todas sus metas (Si/No)> ")
+                        if confirmacion == "Si" or confirmacion == "si":
+                            GoalProcess.BorraJSONMetas()
+                            Log.warning(logName="goals", message="Todas las metas han sido borradas de Metas.json")
+                            time.sleep(1)
+                            print("\nTodas sus metas han sido eliminadas")
+                            time.sleep(2)
+                            exit()
+                        
+                    idSeleccionado = int(idSeleccionado)
+                    if idSeleccionado in idsDisponibles:
+                        idInvalido = False
+                    else:
+                        print("La Meta ingresada no existe")
                         time.sleep(1)
-                        print("\nTodas sus metas han sido eliminadas")
-                        time.sleep(2)
-                        exit()
-                    
-                idSeleccionado = int(idSeleccionado)
-                if idSeleccionado in idsDisponibles:
-                    idInvalido = False
-                else:
-                    print("El ID ingresado no existe")
+                except ValueError:
+                    print("La META se debe indicar por su número")
                     time.sleep(1)
-            except ValueError:
-                print("El ID es numerico")
-                time.sleep(1)
-            except KeyboardInterrupt:
-                print("\nHasta la Proxima!!")
-                time.sleep(2)
-                exit()
-            
-        try:
-            GoalProcess.EliminaMeta(idSeleccionado)
-        except IndexError:
-            pass
-        time.sleep(1)
-        print(f"La meta {idSeleccionado} ha sido eliminada")
-        time.sleep(2)
-        #Si no quedan mas metas se tienen que quitar los corchetes en el archivo Metas.json
-        try:
-            if len(GoalProcess.cargar_Mis_Metas()) == 0:
-                GoalProcess.BorraJSONMetas()
-        except JSONDecodeError:
-            pass
-        except FileNotFoundError:
-            pass
+                except KeyboardInterrupt:
+                    time.sleep(2)
+                    break
+                
+            try:
+                if idSeleccionado != 0:
+                    GoalProcess.EliminaMeta(idSeleccionado)
+                    Log.info(logName="goals", message=f"La Meta con id {idSeleccionado} ha sido eliminada de la lista en Metas.json")
+                    time.sleep(1)
+                    print(f"La meta {idSeleccionado} ha sido eliminada")
+                    time.sleep(2)
+                else:
+                    Log.warning(logName="goals", message="La META es 0 por lo tanto no se borró ninguna meta de Metas.json")
+            except IndexError:
+                pass
+            #Si no quedan mas metas se tienen que quitar los corchetes en el archivo Metas.json
+            try:
+                if len(GoalProcess.cargar_Mis_Metas()) == 0:
+                    GoalProcess.BorraJSONMetas()
+                    Log.warning(logName="goals", message="Todas las metas han sido borradas de Metas.json")
+            except JSONDecodeError:
+                pass
+            except FileNotFoundError:
+                pass
 
     #Opcion D = Salir
     elif goalChoice == 'D':

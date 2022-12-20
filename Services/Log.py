@@ -1,5 +1,6 @@
 import logging
 import os
+from random import randrange
 
 class Log:
     """Class for generating program logs"""
@@ -13,10 +14,19 @@ class Log:
             os.mkdir(cls.LOG_DIR)
 
     @classmethod
+    def __generateLoggerCode(cls) -> str:
+        securityCode:str = ""
+        for i in range(8):
+            #Se genera un numero aleatorio
+            randNum = randrange(1,10)
+            securityCode += str(randNum)
+        return securityCode
+
+    @classmethod
     def debug(cls, logName, message):
         "Logs a Debug message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
         logger.setLevel(logging.DEBUG)
 
         #File where the logs will be saved
@@ -32,7 +42,7 @@ class Log:
     def info(cls, logName, message):
         "Logs a Info message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
         logger.setLevel(logging.INFO)
 
         fileHandler = logging.FileHandler(os.path.join(cls.LOG_DIR, f"{logName}.log"))
@@ -46,7 +56,7 @@ class Log:
     def warning(cls, logName, message):
         "Logs a Warning message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
 
         fileHandler = logging.FileHandler(os.path.join(cls.LOG_DIR, f"{logName}.log"))
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -59,7 +69,7 @@ class Log:
     def error(cls, logName, message):
         "Logs a Error message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
 
         fileHandler = logging.FileHandler(os.path.join(cls.LOG_DIR, f"{logName}.log"))
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -72,7 +82,7 @@ class Log:
     def critical(cls, logName, message):
         "Logs a Critical message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
 
         fileHandler = logging.FileHandler(os.path.join(cls.LOG_DIR, f"{logName}.log"))
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -85,7 +95,7 @@ class Log:
     def exception(cls, logName, message):
         "Logs an Exception stack trace and message on the specified log"
         cls.check_Log_Dir()
-        logger = logging.getLogger(logName)
+        logger = logging.getLogger(cls.__generateLoggerCode())
         
         fileHandler = logging.FileHandler(os.path.join(cls.LOG_DIR, f"{logName}.log"))
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
