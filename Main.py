@@ -7,6 +7,7 @@ from UI.UIMonthReport import load_UIMonthReport
 from UI.UIReportAdvance import load_UIReportAdvance
 from UI.UIGoals import load_UIGoals
 from UI.UIUpdatePublisher import load_UIUpdatePublisher
+from UI.UITechIssue import load_UITechIssue
 from DAL.DT.Env import Env
 from Services.Log import Log
 from json.decoder import JSONDecodeError
@@ -107,9 +108,10 @@ Hola {PUBLICADOR.nombreCompleto}
 |   3. VER AVANCE ACTUAL                 |
 |   4. METAS MENSUALES                   |
 |   5. EDITAR DATOS DE PUBLICADOR        |
-|   6. SALIR                             |
+|   6. REPORTAR UN PROBLEMA TÉCNICO      |                       
+|   7. SALIR                             |
 ==========================================\n> """)
-opcionesDisponibles = ['1', '2', '3', '4', '5', '6']
+opcionesDisponibles = ['1', '2', '3', '4', '5', '6', '7']
 
 try:
     #Se valida que se ingrese una opcion valida
@@ -117,7 +119,7 @@ try:
         print("Opcion Invalida")
         opcion = input("\n> ")
 
-    while opcion != '6':
+    while opcion != '7':
         
         if opcion == '1':
             load_UIDatosDia()
@@ -134,6 +136,9 @@ try:
         elif opcion == '5':
             load_UIUpdatePublisher()
 
+        elif opcion == '6':
+            load_UITechIssue(PUBLICADOR)
+
         print("""
 
 
@@ -145,7 +150,8 @@ try:
 |   3. VER AVANCE ACTUAL                 |
 |   4. METAS MENSUALES                   |
 |   5. EDITAR DATOS DE PUBLICADOR        |
-|   6. SALIR                             |
+|   6. REPORTAR UN PROBLEMA TÉCNICO      |                       
+|   7. SALIR                             |
 ==========================================
         """)
         

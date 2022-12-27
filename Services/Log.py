@@ -104,5 +104,11 @@ class Log:
         logger.addHandler(fileHandler)
         logger.exception(message)
 
-    def get_Log_Files(cls):
-        pass
+    @classmethod
+    def get_Log_Files(cls) -> list:
+        "Returns all the log files to send them or check them"
+        log_Files = list()
+        for element in os.listdir(cls.LOG_DIR):
+            if os.path.isfile(os.path.join(cls.LOG_DIR, element)):
+                log_Files.append(os.path.join(cls.LOG_DIR, element))
+        return log_Files

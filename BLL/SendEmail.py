@@ -116,14 +116,6 @@ def envia_Informe_Por_Correo(informe, publicador:Publicador):
         """
 
     msg.attach(MIMEText(htmlTable, "html"))
-
-    #Se abre el archivo
-    #attachmente = open("Informe del Mes.txt",'rb')
-    #part = MIMEBase("application", "octet-stream")
-    #part.set_payload(attachmente.read())
-    #encoders.encode_base64(part)
-    #part.add_header("Content-Disposition", f"attachment; filename=Informe del Mes.txt")
-    #msg.attach(part)
     msg = msg.as_string()
 
     try:
@@ -488,6 +480,40 @@ def send_Security_Code(publicador:Publicador, securityCode:str):
     </html>
     """
     msg.attach(MIMEText(htmlStr, "html"))
+    msg = msg.as_string()
+
+    try:
+        port = 465
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+            server.login(sender, REPORTBOT_PASS)
+            server.sendmail(sender, reciever, msg)
+    except:
+        raise
+
+def send_TechIssue_Email(publicador: Publicador, issue_Description: str, log_Files: list):
+    sender = REPORTBOT_EMAIL
+    reciever = DEV_EMAIL
+    msg = MIMEMultipart()
+    msg['From'] = sender
+    msg['To'] = reciever
+    msg['Subject'] = "¡Problemas Técnicos!"
+    body = f"""
+    USUARIO: {publicador.nombreCompleto}
+
+    DESCRIPCIÓN DEL PROBLEMA: {issue_Description}
+    """
+    msg.attach(MIMEText(body))
+
+    #Se cargan los archivos 
+    for log_File in log_Files:
+        attachmente = open(log_File,'rb')
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachmente.read())
+        encoders.encode_base64(part)
+        part.add_header("Content-Disposition", f"attachment; filename={os.path.split(log_File)[-1]}")
+        msg.attach(part)
+
     msg = msg.as_string()
 
     try:
