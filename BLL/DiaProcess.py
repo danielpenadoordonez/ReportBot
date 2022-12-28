@@ -1,6 +1,7 @@
 from DAL import File
 from Clases.Dia import Dia
 from datetime import datetime
+from Services.Log import Log
 
 daysRegistered = list()
 
@@ -25,6 +26,7 @@ def GuardaDatos(dia):
 
 def EliminaDatos():
     File.EliminaDatos()
+    Log.warning(logName="daily-data", message="Todas los datos diarios han sido borrados")
 
 def same_Month():
     'Retorna True si el mes actual es el mismo que tienen los datos en DatosMes.json'

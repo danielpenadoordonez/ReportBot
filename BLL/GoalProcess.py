@@ -3,6 +3,7 @@ from DAL import File
 from Clases.Meta import Meta
 from datetime import datetime
 import calendar
+from Services.Log import Log
 
 goalList = list()
 
@@ -74,4 +75,5 @@ def EliminaMeta(id):
 
 def BorraJSONMetas():
     File.BorraJSONMetas()
+    Log.warning(logName="goals", message="Todas las metas han sido borradas")
 
