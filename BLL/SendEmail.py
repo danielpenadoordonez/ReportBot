@@ -292,6 +292,10 @@ def envia_Avance(avance, goallist, publicador:Publicador):
             <td style="font-weight: bold;">Revisitas</td>
             <td style="width: 30%;">{avance['Revisitas']}</td>
         </tr>
+        <tr style="height: 50px;">
+            <td style="font-weight: bold;">Días Informados</td>
+            <td style="width: 30%;">{avance['Dias']}</td>
+        </tr>
     </table>
     <br>
     <br>
@@ -317,7 +321,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                         </tr>
                         <tr style="height: 45px;" class="data">
                             <td style="font-weight: bolder;">Cantidad Actual</td>
-                            <td style="font-weight: bolder;">Cantidad Esperada</td>
+                            <td style="font-weight: bolder;">Debería Tener</td>
                             <td style="font-weight: bolder;">Sobrante o faltante</td>
                             <td style="font-weight: bolder;">% de Logro</td>
                         </tr>
@@ -328,7 +332,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                             <td>{resultados['PorcLogro']}%</td>
                         </tr>
                         <tr id="message">
-                            <td colspan="2"><h3>Excelente: Esta superando su meta</h3></td>
+                            <td colspan="2"><b>Excelente: </b>Lleva más de lo debería tener</td>
                             <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: {goal.cantidad}</h3></td>
                         </tr>
                     </table>
@@ -347,7 +351,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                         </tr>
                         <tr style="height: 45px;" class="data">
                             <td style="font-weight: bolder;">Cantidad Actual</td>
-                            <td style="font-weight: bolder;">Cantidad Esperada</td>
+                            <td style="font-weight: bolder;">Debería Tener</td>
                             <td style="font-weight: bolder;">Sobrante o faltante</td>
                             <td style="font-weight: bolder;">% de Logro</td>
                         </tr>
@@ -358,7 +362,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                             <td>{resultados['PorcLogro']}%</td>
                         </tr>
                         <tr id="message">
-                            <td colspan="2"><h3>Muy Bien: Va igualando su meta</h3></td>
+                            <td colspan="2"><b>Muy Bien: </b>Va igual a la cantidad que debería tener</td>
                             <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: {goal.cantidad}</h3></td>
                         </tr>
                     </table>
@@ -377,7 +381,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                         </tr>
                         <tr style="height: 45px;" class="data">
                             <td style="font-weight: bolder;">Cantidad Actual</td>
-                            <td style="font-weight: bolder;">Cantidad Esperada</td>
+                            <td style="font-weight: bolder;">Debería Tener</td>
                             <td style="font-weight: bolder;">Sobrante o faltante</td>
                             <td style="font-weight: bolder;">% de Logro</td>
                         </tr>
@@ -388,7 +392,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                             <td>{resultados['PorcLogro']}%</td>
                         </tr>
                         <tr id="message">
-                            <td colspan="2"><h3>Va por debajo de su meta</h3></td>
+                            <td colspan="2">Va por debajo de la cantidad que debería llevar</td>
                             <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: {goal.cantidad}</h3></td>
                         </tr>
                     </table>
@@ -499,9 +503,9 @@ def send_TechIssue_Email(publicador: Publicador, issue_Description: str, log_Fil
     msg['To'] = reciever
     msg['Subject'] = "¡Problemas Técnicos!"
     body = f"""
-    USUARIO: {publicador.nombreCompleto}
+USUARIO: {publicador.nombreCompleto}
 
-    DESCRIPCIÓN DEL PROBLEMA: {issue_Description}
+DESCRIPCIÓN DEL PROBLEMA: {issue_Description}
     """
     msg.attach(MIMEText(body))
 

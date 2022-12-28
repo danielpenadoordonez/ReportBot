@@ -31,7 +31,7 @@ def load_UIMonthReport():
         DiaProcess.carga_Dias_Registrados()
         if DiaProcess.same_Month():
             print("Este mes no ha terminado, debe esperar a que concluya para enviar el informe")
-            Log.warning(logName="advance-report", message="No se puede enviar el informe hasta que el mes no haya terminado")
+            Log.warning(logName="advance-report", message="No se puede enviar el informe hasta que el mes no haya concluido")
             time.sleep(2)
             raise ReportBotError("Mes no ha concluido")
     except JSONDecodeError:
@@ -91,11 +91,14 @@ def load_UIMonthReport():
             print("\n\t¡El Informe ha sido creado y enviado!")
         except smtplib.SMTPAuthenticationError:
             print("Error de autenticacion en el correo, contacte al desarrollador e informele de este error")
+            Log.critical(logName="advance-report", message=f"{PUBLICADOR.nombreCompleto} no pudo enviar su informe!!")
             Log.exception(logName="advance-report", message=err)
         except smtplib.SMTPException:
             print("Ocurrio un error al enviar el correo")
+            Log.critical(logName="advance-report", message=f"{PUBLICADOR.nombreCompleto} no pudo enviar su informe!!")
             Log.exception(logName="advance-report", message=err)
         except Exception as err:
             print("Ocurrio un error al enviar el correo, revise su conexión a Internet")
+            Log.critical(logName="advance-report", message=f"{PUBLICADOR.nombreCompleto} no pudo enviar su informe!!")
             Log.exception(logName="advance-report", message=err)
         time.sleep(5)
