@@ -92,18 +92,21 @@ class Informe:
         publicaciones = self.getTotalPublicaciones()
         revisitas = self.getTotalRevisitas()
         videos = self.getTotalVideos()
+        diasInf = self.getTotalDias()
         
         avance = f""" 
                          ----------------------------------
-                         |                 |                
-                         |  Horas          |      {horas}         
-                         |                 |              
-                         |  Publicaciones  |      {publicaciones}       
-                         |                 |              
-                         |  Videos         |      {videos}       
-                         |                 |              
-                         |  Revisitas      |      {revisitas}            
-                         |                 |              
+                         |                  |                
+                         |  Horas           |      {horas}         
+                         |                  |              
+                         |  Publicaciones   |      {publicaciones}       
+                         |                  |              
+                         |  Videos          |      {videos}       
+                         |                  |              
+                         |  Revisitas       |      {revisitas}            
+                         |                  |              
+                         |  Días Informados |      {diasInf}    
+                         |                  |
                          ----------------------------------"""
                     
         return avance

@@ -332,7 +332,7 @@ def envia_Avance(avance, goallist, publicador:Publicador):
                             <td>{resultados['PorcLogro']}%</td>
                         </tr>
                         <tr id="message">
-                            <td colspan="2"><b>Excelente: </b>Lleva más de lo debería tener</td>
+                            <td colspan="2"><b>Excelente: </b>Lleva más de lo que debería tener</td>
                             <td colspan="2" style="background-color: white;"><h3>CANTIDAD META: {goal.cantidad}</h3></td>
                         </tr>
                     </table>
